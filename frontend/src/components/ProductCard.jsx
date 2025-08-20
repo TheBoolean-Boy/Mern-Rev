@@ -11,8 +11,8 @@ function ProductCard({ product }) {
 
   const {deleteProduct} =useProductStore();
   const toast = useToast();
-  const handleDelete = (pid) => {
-    const {success, message} = deleteProduct(pid);
+  const handleDelete = async(pid) => {
+    const {success, message} = await deleteProduct(pid);
 
     if(!success){
       toast({

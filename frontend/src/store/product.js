@@ -38,6 +38,7 @@ export const useProductStore = create ( (set) => ({
       method: "DELETE"
     })
     const data = await res.json();
+    console.log("sent by server", data)
     if(!data.success) return {success:false, message: data.message}
 
     set( state => ({products: state.products.filter((product) => product._id !== pid) }))
