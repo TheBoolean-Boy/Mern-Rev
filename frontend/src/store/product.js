@@ -1,4 +1,4 @@
-import { set } from "mongoose";
+
 import {create} from "zustand"
 
 export const useProductStore = create ( (set) => ({
@@ -38,10 +38,29 @@ export const useProductStore = create ( (set) => ({
       method: "DELETE"
     })
     const data = await res.json();
-    console.log("sent by server", data)
+    
     if(!data.success) return {success:false, message: data.message}
 
     set( state => ({products: state.products.filter((product) => product._id !== pid) }))
     return {success:true, message: data.message}
+  },
+
+  updateProduct: async(pid, updatedProduct) => {
+    
+    const res = await fetch(`/api/products/${pid}`, {
+      method: "PUT",
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedProduct)
+    })
+    const data = await res.json();
+    if(!data.success) return {success: false, message: data.message}
+    set ( state => ({
+      products: state.products.map( product => product._id === pid ? data.data : product)
+    }))
+
+    return {success: true, message: "Product updated successfully"}
   }
+
 }))
